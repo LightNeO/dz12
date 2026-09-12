@@ -28,11 +28,12 @@
 | `1.2.2 project_structure.md` | Дерево тестового проєкту (без коду тестів) |
 | `1.3 traceability_matrix.md` | Матриця трасованості «Вимога → Тест-файл → Тест-функція» (повне покриття) |
 | `2 wokwi_link.md` | Посилання на Wokwi-модель та гіфку з роботою|
-| `wokwi/diagram.json`, `wokwi/sketch.ino` | Файли Wokwi-моделі (готові до вставки у wokwi.com) |
+| `firmware`, `mqqt` | Додаткові файли для реалізації одного з критичних сценаріїв на реальних дивайсах(в ДЗ така задача відсутня але я вирішив попрактикуватися) |
 
 ## Як читати комплект
 
-1. `PRD.md` — джерело істини: 14 функціональних і 10 нефункціональних вимог з ID (FR-xxx / NFR-xxx).
-2. `stand_diagram.png` — як фізично зібраний стенд перевіряє ці вимоги (Power Control, Signal Injection, Observability, MQTT-перехоплення).
-3. `project_structure.md` — як організований pytest-проєкт (drivers / tests: smoke-functional-e2e-stability / fixtures).
-4. `traceability_matrix.md` — доказ покриття: кожна вимога PRD → конкретний тест-файл і тест-функція.
+1. `1.1 PRD.md` — джерело істини: 14 функціональних і 10 нефункціональних вимог з ID (FR-xxx / NFR-xxx).
+2. `1.2.1 stand_diagram.png` — як фізично зібраний стенд перевіряє ці вимоги (Power Control, Signal Injection, Observability, MQTT-перехоплення).
+3. `1.2.2 project_structure.md` — як організований pytest-проєкт (drivers / tests: smoke-functional-e2e-stability / fixtures).
+4. `1.3 traceability_matrix.md` — доказ покриття: кожна вимога PRD → конкретний тест-файл і тест-функція.
+5. `firmware/README.md` - 
