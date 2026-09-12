@@ -1,20 +1,20 @@
-# AirGuard hardware firmware
+# Прошивки AirGuard
 
-This directory contains two independent Arduino-framework projects:
+У цій папці містяться два незалежні проєкти на Arduino Framework:
 
-- `dut_esp32s3`: firmware for ESP32-S3 DevKitC-1 N16R8;
-- `agent_nano`: sensor-injection agent for Arduino Nano.
+- `dut_esp32s3` — прошивка DUT для ESP32-S3 DevKitC-1 N16R8;
+- `agent_nano` — агент емуляції датчика забруднення для Arduino Nano.
 
-## Wiring
+## Підключення
 
-| Signal | ESP32-S3 | Arduino Nano |
+| Сигнал | ESP32-S3 | Arduino Nano |
 |---|---:|---:|
-| Simulated CO2 analog input | GPIO4 | D9 PWM through voltage divider |
-| Alarm LED | GPIO2 -> resistor -> LED -> GND | - |
-| Common ground | GND | GND |
+| Емульований аналоговий сигнал CO2 | GPIO4 | D9 PWM через дільник напруги |
+| LED тривоги | GPIO2 -> резистор -> LED -> GND | - |
+| Спільна земля | GND | GND |
 
-The Nano is a 5 V board and the ESP32 ADC is not 5 V tolerant. Do not connect D9
-directly to GPIO4. Use a divider, for example:
+Arduino Nano працює з напругою 5 В, а ADC ESP32 не захищений від 5 В. Не
+підключайте D9 безпосередньо до GPIO4. Використайте дільник напруги, наприклад:
 
 ```text
 Nano D9 --- 10 kOhm ---+--- ESP32 GPIO4
@@ -24,16 +24,16 @@ Nano D9 --- 10 kOhm ---+--- ESP32 GPIO4
                       GND
 ```
 
-The divider limits 5 V to approximately 3.33 V. A capacitor from GPIO4 to GND
-(for example 100 nF) is recommended to smooth the PWM signal, but the ESP32
-firmware also averages 16 ADC samples.
+Дільник зменшує 5 В приблизно до 3,33 В. Для згладжування PWM-сигналу
+рекомендується встановити конденсатор між GPIO4 і GND, наприклад 100 нФ.
+Прошивка ESP32 додатково усереднює 16 вимірювань ADC.
 
-The LED must have a series resistor. Use the resistor value appropriate for the
-LED; a typical starting value is 220-1k Ohm.
+LED обов'язково повинен мати послідовний резистор. Використайте значення,
+відповідне вашому LED; типовий діапазон для початку — 220 Ом...1 кОм.
 
-## Agent commands
+## Команди агента
 
-Open the Nano serial monitor at 115200 baud:
+Відкрийте Serial Monitor Arduino Nano на швидкості 115200 бод:
 
 ```text
 set 800
@@ -43,11 +43,12 @@ dec 100
 status
 ```
 
-The Nano maps 400..5000 ppm to 0..255 PWM duty on D9.
+Nano перетворює діапазон 400...5000 ppm у коефіцієнт заповнення PWM 0...255
+на виході D9.
 
-## DUT commands
+## Команди DUT
 
-Open the ESP32 serial monitor at 115200 baud:
+Відкрийте Serial Monitor ESP32 на швидкості 115200 бод:
 
 ```text
 status
@@ -59,30 +60,43 @@ config get
 factory_reset
 ```
 
-The DUT turns the LED on when CO2 is above the threshold and turns it off only
-below `threshold - hysteresis`. The firmware is configured for real WiFi/MQTT.
-WiFi and broker settings are stored in the local ignored file
-`dut_esp32s3/src/secrets.h`; use `secrets.example.h` as a template on another
-machine.
+DUT вмикає LED, коли CO2 перевищує поріг, і вимикає його лише після падіння
+нижче `threshold - hysteresis`. Прошивка налаштована на реальне підключення
+через WiFi та MQTT.
 
-## Local MQTT broker
+Налаштування WiFi і broker зберігаються в локальному файлі, який ігнорується
+Git:
 
-The PC can run Mosquitto in Docker. Its current LAN address is `192.168.50.46`.
-Start the broker from the `mqtt` directory:
+```text
+dut_esp32s3/src/secrets.h
+```
+
+Для налаштування на іншому ПК використовуйте шаблон:
+
+```text
+dut_esp32s3/src/secrets.example.h
+```
+
+## Локальний MQTT broker
+
+На ПК можна запустити Mosquitto у Docker. Поточна IP-адреса ПК у локальній
+мережі — `192.168.50.46`.
+
+Запустіть broker із папки `mqtt`:
 
 ```bash
 docker compose up -d
 ```
 
-Subscribe to AirGuard messages:
+Підпишіться на повідомлення AirGuard:
 
 ```bash
 mosquitto_sub -h 192.168.50.46 -p 1883 -t 'test/airguard/#' -v
 ```
 
-The current broker configuration allows anonymous access on the local network,
-which is suitable for this isolated homework LAN but not for production.
+Поточна конфігурація broker дозволяє anonymous-доступ у локальній мережі. Це
+підходить для ізольованого навчального стенда, але не для production-системи.
 
-Temperature and humidity are emitted as JSON `null` because no SHT31 sensor is
-present. A buzzer is not required for this hardware configuration; the LED is
-the only alarm actuator.
+Температура і вологість передаються як JSON `null`, оскільки SHT31 не
+підключений. Баззер для цієї конфігурації не потрібен: єдиним виконавчим
+елементом тривоги є LED.
