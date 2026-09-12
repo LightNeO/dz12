@@ -36,4 +36,4 @@
 2. `1.2.1 stand_diagram.png` — як фізично зібраний стенд перевіряє ці вимоги (Power Control, Signal Injection, Observability, MQTT-перехоплення).
 3. `1.2.2 project_structure.md` — як організований pytest-проєкт (drivers / tests: smoke-functional-e2e-stability / fixtures).
 4. `1.3 traceability_matrix.md` — доказ покриття: кожна вимога PRD → конкретний тест-файл і тест-функція.
-5. `firmware/README.md` - 
+5. `firmware/README.md` - опис мого підходу до критичного тест кейсу на реальних дивайсах та відео звіт
