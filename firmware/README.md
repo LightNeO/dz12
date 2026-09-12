@@ -105,6 +105,6 @@ mosquitto_sub -h 192.168.50.46 -p 1883 -t 'test/airguard/#' -v
 
 Відео звіт:
 
-<video src="./report.mp4" controls width="720">
+<video src="https://github.com/user-attachments/assets/c6e5b5ac-17d9-477c-adf4-1477a09284cc" controls width="720">
   Ваш браузер не підтримує відтворення відео. Відкрийте файл `report.mp4` у цій папці.
 </video>
